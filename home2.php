@@ -1,0 +1,119 @@
+<?php
+ob_start();
+session_start();
+require_once 'dbconnect2.php';
+//homme2.php
+//if session is not set this will redirect to login page
+if(!isset($_SESSION['user']) ) {
+header("Location: login2.php");
+exit;
+}
+
+?>
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Welcome</title> 
+<link rel="stylesheet" href="assets/css/bootstrap.min.css" type="text/css"  />
+<link rel="stylesheet" href="style.css" type="text/css" />
+    <style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 50%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 3px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+ <div class="page-header">
+     <h1>Home </h1>
+     </div>
+        
+        <div class="row">
+        <div class="col-lg-12">
+        </div>
+        </div>
+    
+    </div>
+    
+    </div>
+
+
+ <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+
+         
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+      
+                  <form action="upload.php" method="post" enctype="multipart/form-data" /> 
+                  Select image to upload
+                  <input type="file" name="fileToUpload" /> 
+                  <br/>
+                  Name for Photo 
+                  <input type = "text" name = "photoName" />
+                  <br/>
+                  Caption for Photo
+                  <input type = "text" name = "photoCaption" />
+                  <br/>
+                  <input type="submit" value="Upload Image" name="submit"/>
+                  </form>
+
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+
+                  <form action="search.php" method="post" enctype="multipart/form-data" /> 
+                  Enter a name to find a picture 
+                  <input type = "text" name = "photoName" />
+                  <br/>
+                  Or Enter a caption to find a picture
+                  <input type = "text" name = "photoCaption" />
+                  <br/>
+                  <input type="submit" value="Find Image" name="submit"/>
+                  </form>
+
+ -->                  <body>
+                  </body>
+
+
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                <a href="logout2.php?logout">Sign Out</a>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div> 
+    </nav> 
+
+ <div id="wrapper">
+
+ <div class="container">
+    <script src="assets/jquery-1.11.3-jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    
+</body>
+</html>
+<?php ob_end_flush(); ?>   
