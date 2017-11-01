@@ -1,0 +1,181 @@
+<?php
+ob_start();
+session_start();
+require_once 'dbconnect.php';
+
+//if session is not set this will redirect to login page
+if(!isset($_SESSION['user']) ) {
+header("Location: login.php");
+exit;
+}
+
+//print "SELECT MessageID, Subject, MsgTime, MsgText, Sender, Reciever, Status FROM mailbox WHERE Sender= '" .$_SESSION['user']. "'";
+//print "SELECT MessageID, Subject, MsgTime, MsgText, Sender, Reciever, Status FROM mailbox WHERE Reciever = '" .$_SESSION['user']."'";
+
+//print "SELECT MessageID, Subject, MsgTime, MsgText, Sender, Reciever, Status FROM mailbox WHERE Sender = '" .$_SESSION['user']."'";
+
+?>
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Welcome - <?php echo $userRow['Username']; ?></title> 
+<link rel="stylesheet" href="assets/css/bootstrap.min.css" type="text/css"  />
+<link rel="stylesheet" href="style.css" type="text/css" />
+    <style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 50%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 3px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+ <div class="page-header">
+     <h1>Your Inbox </h1>
+     </div>
+        
+        <div class="row">
+        <div class="col-lg-12">
+        </div>
+        </div>
+    
+    </div>
+    
+    </div>
+
+
+ <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+
+          <table>
+            <tr>    
+                <h1>INBOX</h1>
+                <th>Sender</th>
+                <th>Receiver</th>
+                <th>Subject</th>
+                <th>MsgTime</th>
+                <th>MsgText</th>
+                <th>MessageID</th>
+<!--                <th>Status</th>-->
+                 <th>Delete</th>
+                </tr>
+              
+  <?php  
+//              echo $_SESSION['user'];
+              //select loggedin user detail
+              
+$mailboxresult=mysql_query("SELECT MessageID, Subject, MsgTime, MsgText, Sender, Reciever, Status FROM mailbox WHERE Reciever = '" .$_SESSION['user']."'");
+              
+
+//echo "result: " + $mailboxresult;
+if($mailboxresult === FALSE) { 
+    die(mysql_error()); // TODO: better error handling
+    
+}
+while ($userRow=mysql_fetch_array($mailboxresult, MYSQL_NUM))
+{
+    //echo "<tr><td> Aie :" + userRow + "</td></tr>";
+    echo "<tr>";
+                print "<td>$userRow[4]</td>";
+                print "<td>$userRow[5]</td>";
+                print "<td>$userRow[1]</td>";
+                print "<td>$userRow[2]</td>";
+                print "<td>$userRow[3]</td>";
+                print "<td>$userRow[0]</td>";
+                print "<td><a href=\"delete.php?delete=".$userRow[0]."\">Delete</a></td>";      
+    echo "<tr>";
+}
+     
+              
+            ?>  
+            
+            </table>  
+
+
+            <table>
+            <tr>
+                <h1>SENT MAIL</h1>
+                <th>Sender</th>
+                <th>Receiver</th>
+                <th>Subject</th>
+                <th>MsgTime</th>
+                <th>MsgText</th>
+                <th>MessageID</th>
+<!--                <th>Status</th>-->
+                 <!-- <th>Delete</th> -->
+                </tr>
+              
+  <?php  
+//              echo $_SESSION['user'];
+              //select loggedin user detail
+              
+$mailboxTworesult=mysql_query("SELECT MessageID, Subject, MsgTime, MsgText, Sender, Reciever, Status FROM mailbox WHERE Sender = '" .$_SESSION['user']."'");
+
+//echo "result: " + $mailboxresult;
+if($mailboxTworesult === FALSE) { 
+    die(mysql_error()); // TODO: better error handling
+    
+}
+while ($userRow=mysql_fetch_array($mailboxTworesult, MYSQL_NUM))
+{
+    //echo "<tr><td> Aie :" + userRow + "</td></tr>";
+    echo "<tr>";
+                print "<td>$userRow[4]</td>";
+                print "<td>$userRow[5]</td>";
+                print "<td>$userRow[1]</td>";
+                print "<td>$userRow[2]</td>";
+                print "<td>$userRow[3]</td>";
+                print "<td>$userRow[0]</td>";
+                // print "<td><a href=\"delete.php?delete=".$userRow[4]."\">Delete</a></td>";      
+    echo "<tr>";
+}
+     
+              
+            ?>  
+            
+            </table>            
+            
+            
+            
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+      
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+
+                  <a href="sendEmail.php?send">Send a Message</a>
+                <a href="logout.php?logout">Sign Out</a>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div> 
+    </nav> 
+
+ <div id="wrapper">
+
+ <div class="container">
+    
+    
+    
+    <script src="assets/jquery-1.11.3-jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    
+</body>
+</html>
+<?php ob_end_flush(); ?>   

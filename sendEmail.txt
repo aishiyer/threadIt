@@ -1,0 +1,158 @@
+<?php
+session_start();
+
+require_once 'dbconnect.php';
+
+
+?>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="<?php echo $design; ?>/style.css" rel="stylesheet" title="Style" />
+    <title>Send a Message</title>
+</head>
+<body>
+    <div class="header">
+        <h1>Send a Message</h1>
+    </div>
+    <div class="content">
+        <h3>New Personal Message</h3>  
+        <!--            Display the form-->
+        <form action="sendEmail.php" method="post">
+            Please fill the following form to send a message.<br />
+            <label for="title">Subject</label><input type="text"  id="title" name="title" /><br />
+            <label for="reciever">Recipient</label><input type="text" id="reciever" name="reciever" /><br />
+            <label for="message">Message</label><textarea cols="40" rows="5" id="message" name="message"></textarea><br />
+            <input type="submit" value="Send" />
+        </form>
+    </div>
+<!-- </body>
+</html> -->
+<?php
+//         echo $_POST['title'];
+//echo $_SESSION['user'];
+
+//We check if the user is logged 
+if(isset($_SESSION['user']))
+{
+    $form = true;
+    $otitle = '';
+    $orecip = '';
+    $omessage = '';
+    
+// echo $_POST['title'];
+
+//We check if the form has been sent
+    if(isset($_POST['title'], $_POST['reciever'], $_POST['message']))
+    {
+        $otitle = $_POST['title'];
+        $orecip = $_POST['reciever'];
+        $omessage = $_POST['message'];
+
+        echo $otitle;
+                echo $orecip;
+                echo $omessage;
+        //We remove slashes depending on the configuration
+        // if(get_magic_quotes_gpc())
+        // {
+        //     $otitle = stripslashes($otitle);
+        //     $orecip = stripslashes($orecip);
+        //     $omessage = stripslashes($omessage);
+        // }
+
+//                echo "Check Point 1";
+
+        //We check if all the fields are filled
+        if($_POST['title']!='' and $_POST['reciever']!='' and $_POST['message']!='')
+        {
+                //We protect the variables
+            // $Subject = mysql_real_escape_string($otitle);
+            // $Reciever = mysql_real_escape_string($orecip);
+            // $MsgText = mysql_real_escape_string($omessage);
+                //We check if the recipient exists
+            $dn1 = mysql_num_rows(mysql_query('select Username from Users WHERE Username="'.$orecip.'"'));
+            
+            
+            // echo $dn1;
+            if($dn1 > 0)
+            {
+                $lastMessageId = mysql_num_rows(mysql_query('SELECT * from Mailbox'));
+                        
+                $lastMessageId = $lastMessageId + 1;
+                // echo "Check Point 2 - ";
+                // echo $lastMessageId; 
+                
+                $MsgTime = new DateTime('NOW');
+                 //We send the message
+                $username = $_SESSION['user'];
+                $query = "INSERT into Mailbox (MessageID, Subject,  Sender, Reciever, MsgTime, MsgText, Status) values('$lastMessageId', '$otitle', '$username', '$orecip', 1.0, '$omessage', 0)";
+                if(mysql_query($query))
+                    ?>
+                <!-- echo $otitle; -->
+                <!-- echo $orecip; -->
+                <!-- echo $omessage; -->
+                <div class="message">The message has successfully been sent.<br />
+                    <a href="home.php">List of my Personal messages</a></div>
+                    <?php   
+
+                }
+                else {
+                    $error = 'The recipient does not exists.';
+                    echo 'Error saving email.';
+                }
+
+
+
+
+                $form = false;
+            }
+        //                         }
+
+        //                         else
+        //                         {
+        //                                 //Otherwise, we say that an error occured
+        //                                 $error = 'An error occurred while sending the message';
+        //                         }
+        //                 }
+        //                 else
+        //                 {
+        //                         //Otherwise, we say the user cannot send a message to himself
+        //                         $error = 'You cannot send a message to yourself.';
+        //                 }
+        //         }
+        //         else
+        //         {
+        //                 //Otherwise, we say the recipient does not exists
+        //                 $error = 'The recipient does not exists.';
+        //         }
+        // }
+        // else
+        // {
+        //         //Otherwise, we say a field is empty
+        //         $error = 'A field is empty. Please fill of the fields.';
+        // }
+            }
+        }
+           
+//             if($form)
+//             {
+// //We display a message if necessary
+//                 if(isset($error))
+//                 {
+//                     echo '<div class="message">'.$error.'</div>';
+//                 }
+
+//             }
+
+//             else
+//             {
+//                 echo '<div class="message">You must be logged to access this page.</div>';
+//             }
+            ?>
+            <div class="foot"><a href="home.php">Go to my Personal messages</a> 
+
+        </body>
+</html>
+

@@ -1,0 +1,34 @@
+ <?php
+session_start();
+require_once 'dbconnect.php';
+
+//if session is not set this will redirect to login page
+if(!isset($_SESSION['user']) ) {
+header("Location: login.php");
+exit;
+}
+
+// define('DBHOST' , 'localhost');
+// define('DBUSER' , 'root');
+// define('DBPASS' , '');
+// define('DBNAME' , 'dbhwthree');
+
+// mysql_connect(DBHOST, DBUSER, DBPASS) or die("Cannot connect to SQL");
+
+// mysql_select_db('dbhwthree');
+// $query=("SELECT * FROM Mailbox");
+// $result=mysql_query($query);
+// $row=mysql_fetch_array($result);
+$messageid = $_GET['delete'];
+
+echo "Check point 1";
+echo $messageid;
+
+
+mysql_query("DELETE from Mailbox WHERE MessageID=$messageid");
+
+header("Location: home.php");
+
+
+?>
+

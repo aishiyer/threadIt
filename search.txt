@@ -1,0 +1,51 @@
+<?php
+ob_start();
+session_start();
+require_once 'dbconnect2.php';
+//search.php
+//if session is not set this will redirect to login page
+if(!isset($_SESSION['user']) ) {
+header("Location: login2.php");
+exit;
+}
+
+//if photoName is full
+ if ($_POST["photoName"] != '')
+ {
+ 	 $photoName = '%' . $_POST["photoName"] . '%';
+
+ 	$sql = "SELECT Photodata FROM Photos WHERE Photoname LIKE '$photoName'";
+ 	//echo $sql;
+ 	$result = mysql_query($sql);
+
+ 	if (!$result) {
+ 		echo "Something wrong with SQL statement";
+ 	}
+
+ 	while($row = mysql_fetch_array($result)) {
+
+  echo '<img src = "data:image/jpeg;base64,' . base64_encode($row['Photodata']).'""width = "290" height = "290"/>';
+
+}
+ }
+ else if ($_POST["photoCaption"] != '')
+ {
+ 	 $photoCaption = '%' . $_POST["photoCaption"] . '%';
+
+ 	 	$sql = "SELECT Photodata FROM Photos WHERE Caption LIKE '$photoCaption'";
+ 	//echo $sql;
+ 	$result = mysql_query($result);
+ 	if (!$result) {
+ 		echo "Something wrong with SQL statement";
+ 	}
+ 	while($row = mysql_fetch_array($result)) {
+
+   echo '<img src = "data:image/jpeg;base64,' . base64_encode($row['Photodata']).'""width = "290" height = "290"/>';
+}
+}
+else
+{
+	echo "Nothing to return.";
+}
+
+?>
